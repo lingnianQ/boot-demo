@@ -4,15 +4,9 @@ import com.baidu.entity.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
 
 /**
  * @author sytsnb@gmail.com
@@ -53,7 +47,7 @@ public class UserController {
                 nickname == null || nickname.isEmpty() ||
                 ageStr == null || ageStr.isEmpty() || !ageStr.matches("[0-9]+")) {
             try {
-                response.sendRedirect("./reg_info_error.html");
+                response.sendRedirect("/reg_info_error.html");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -72,7 +66,7 @@ public class UserController {
          */
         if (file.exists()) {
             try {
-                response.sendRedirect("./have_user.html");
+                response.sendRedirect("/have_user.html");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -87,11 +81,54 @@ public class UserController {
             e.printStackTrace();
         }
         try {
-            response.sendRedirect("./reg_success.html");
+            response.sendRedirect("/reg_success.html");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         System.out.println(user);
+    }
+
+    /**
+     * login
+     *
+     * @param request
+     * @param response
+     */
+    @RequestMapping("/loginUser")
+    public void login(HttpServletRequest request, HttpServletResponse response) {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        User user = new User(username, password);
+        File file = new File(userDir, user.getName() + ".obj");
+
+        if (user.getName() == null || user.getPassword() == null
+                || user.getName().isEmpty() || user.getPassword().isEmpty()
+                || !file.exists()) {
+            try {
+                response.sendRedirect("/login/login_info_error.html");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+
+        try (
+                FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis)) {
+            User userGet = (User) ois.readObject();
+            if (userGet.getName().equals(user.getName())
+                    && userGet.getPassword().equals(user.getPassword())) {
+                response.sendRedirect("/login/login_success.html");
+            }else {
+                response.sendRedirect("/login/login_fail.html");
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
