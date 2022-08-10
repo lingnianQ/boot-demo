@@ -47,7 +47,7 @@ public class UserController {
                 nickname == null || nickname.isEmpty() ||
                 ageStr == null || ageStr.isEmpty() || !ageStr.matches("[0-9]+")) {
             try {
-                response.sendRedirect("/reg_info_error.html");
+                response.sendRedirect("/register/reg_info_error.html");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -66,7 +66,7 @@ public class UserController {
          */
         if (file.exists()) {
             try {
-                response.sendRedirect("/have_user.html");
+                response.sendRedirect("/register/have_user.html");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -81,7 +81,7 @@ public class UserController {
             e.printStackTrace();
         }
         try {
-            response.sendRedirect("/reg_success.html");
+            response.sendRedirect("/register/reg_success.html");
         } catch (IOException e) {
             e.printStackTrace();
         }
