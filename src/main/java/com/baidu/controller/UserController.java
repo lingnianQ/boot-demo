@@ -4,6 +4,7 @@ import com.baidu.entity.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -30,12 +31,34 @@ public class UserController {
         }
     }
 
+    /**
+     * register
+     *
+     * @param request
+     * @param response
+     */
     @RequestMapping("/regUser")
     public void reg(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String nickname = request.getParameter("nickname");
         String ageStr = request.getParameter("age");
+//        Cookie cookie = new Cookie(username, password);
+//        response.addCookie(cookie);
+        /*
+         * register -- if
+         */
+        if (username == null || username.isEmpty() ||
+                password == null || password.isEmpty() ||
+                nickname == null || nickname.isEmpty() ||
+                ageStr == null || ageStr.isEmpty() || !ageStr.matches("[0-9]+")) {
+            try {
+                response.sendRedirect("./reg_info_error.html");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
 
         int age = Integer.parseInt(ageStr);
 
@@ -44,6 +67,17 @@ public class UserController {
          * File(File parent ,String child)
          */
         File file = new File(userDir, username + ".obj");
+        /*
+         * 判断用户（文件） 是否存在
+         */
+        if (file.exists()) {
+            try {
+                response.sendRedirect("./have_user.html");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
 
         try (
                 FileOutputStream fos = new FileOutputStream(file);
@@ -52,7 +86,6 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         try {
             response.sendRedirect("./reg_success.html");
         } catch (IOException e) {
