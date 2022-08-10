@@ -17,29 +17,32 @@
 <body>
 <div style="text-align: center">
     <h1>用户注册</h1>
-    <table border="1" style="margin: auto;width: 400px;height: 100px">
-        <tr>
-            <td>用户名</td>
-            <td><input type="text" class="input">
-            </td>
-        </tr>
-        <tr>
-            <td>密码</td>
-            <td><input type="text" class="input"></td>
-        </tr>
-        <tr>
-            <td>昵称</td>
-            <td><input type="text" class="input"></td>
+    <form action="/regUser" method="get">
+        <table border="1" style="margin: auto;width: 400px;height: 100px">
+            <tr>
+                <td>用户名</td>
+                <td><input type="text" name="username" class="input">
+                </td>
+            </tr>
+            <tr>
+                <td>密码</td>
+                <td><input type="password" name="password" class="input"></td>
+            </tr>
+            <tr>
+                <td>昵称</td>
+                <td><input type="text" name="nickname" class="input"></td>
 
-        </tr>
-        <tr>
-            <td>年龄</td>
-            <td><input type="text" class="input"></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="button" value="注册"></td>
-        </tr>
-    </table>
+            </tr>
+            <tr>
+                <td>年龄</td>
+                <td><input type="text" name="age" class="input"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" value="注册"></td>
+            </tr>
+        </table>
+    </form>
+
 </div>
 </body>
 </html>
