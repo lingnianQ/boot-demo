@@ -37,6 +37,9 @@ public class UserController {
     public void delUser(HttpServletRequest request, HttpServletResponse response) {
         String username = request.getParameter("username");
         File file = new File(userDir, username + ".obj");
+        if (!file.exists()) {
+            return;
+        }
         file.delete();
     }
 
