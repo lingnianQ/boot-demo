@@ -169,6 +169,7 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         try {
             response.sendRedirect("/register/reg_success.html");
         } catch (IOException e) {
