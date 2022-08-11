@@ -36,8 +36,10 @@ public class ArticleController {
     @RequestMapping("/writeArticle")
     public void writeArticle(HttpServletRequest request, HttpServletResponse response) {
         String title = request.getParameter("title");
+        String author = request.getParameter("author");
         String content = request.getParameter("content");
 
+        Article article = new Article(title, author, content);
         File file = new File(articleDir, title + ".obj");
 
         if (title == null || title.isEmpty()) {
@@ -48,8 +50,6 @@ public class ArticleController {
             }
             return;
         }
-
-        Article article = new Article(title, content);
 
         try (
                 FileOutputStream fos = new FileOutputStream(file);
