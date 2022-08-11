@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author sytsnb@gmail.com
@@ -21,7 +23,85 @@ public class UserController {
     static {
         userDir = new File("./src/main/resources/templates/users/");
         if (!userDir.exists()) {
-            userDir.mkdir();
+            userDir.mkdirs();
+        }
+    }
+
+    /**
+     * delUser
+     *
+     * @param request
+     * @param response
+     */
+    @RequestMapping("/delUser")
+    public void delUser(HttpServletRequest request, HttpServletResponse response) {
+        String username = request.getParameter("username");
+        File file = new File(userDir, username + ".obj");
+        file.delete();
+    }
+
+    /**
+     * userList
+     *
+     * @param request
+     * @param response
+     */
+    @RequestMapping("/userList")
+    public void userList(HttpServletRequest request, HttpServletResponse response) {
+
+        List<User> userList = new ArrayList<>();
+        File[] subs = userDir.listFiles(pathname -> pathname.getName().endsWith(".obj"));
+
+        assert subs != null;
+        for (File sub : subs) {
+            try (FileInputStream fis = new FileInputStream(sub);
+                 ObjectInputStream ois = new ObjectInputStream(fis)
+            ) {
+                User user = (User) ois.readObject();
+                userList.add(user);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            response.setContentType("text/html;charset=utf-8");
+            PrintWriter pw = response.getWriter();
+            pw.println("<!DOCTYPE html>\n" +
+                    "<html lang=\"en\">\n" +
+                    "<head>\n" +
+                    "    <meta charset=\"UTF-8\">\n" +
+                    "    <title>用户列表</title>\n" +
+                    "</head>\n" +
+                    "<body>\n" +
+                    "\n" +
+                    "<center>\n" +
+                    "\n" +
+                    "<h1>用户列表</h1>" +
+                    "<table border=\"1\">" +
+                    "<tr>" +
+                    "<td>用户" + "</td>" +
+                    "<td>密码" + "</td>" +
+                    "<td>昵称" + "</td>" +
+                    "<td>年龄" + "</td>" +
+                    "<td>操作" + "</td>" +
+                    "</tr>" + "\n");
+            for (User user : userList) {
+                pw.println("<tr>" +
+                        "<td>" + user.getName() + "</td>" +
+                        "<td>" + user.getPassword() + "</td>" +
+                        "<td>" + user.getNickname() + "</td>" +
+                        "<td>" + user.getAge() + "</td>" +
+                        "<td>" + "<a href='/delUser?username=" + user.getName() + "'>删除</a>" + "</td>" +
+                        "</tr>" + "\n");
+            }
+            pw.println("</table>" +
+                    "</center>" +
+                    "</body>\n" +
+                    "</html>");
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
