@@ -39,7 +39,7 @@ public class UserController {
         File file = new File(userDir, username + ".obj");
         if (!file.exists()) {
             return;
-         }
+        }
         file.delete();
         try {
             response.sendRedirect("/userList");
@@ -104,6 +104,7 @@ public class UserController {
                         "</tr>" + "\n");
             }
             pw.println("</table>" +
+                    "<a href='/index.html'>返回首页</a>" +
                     "</center>" +
                     "</body>\n" +
                     "</html>");
