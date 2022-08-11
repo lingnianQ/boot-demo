@@ -39,8 +39,13 @@ public class UserController {
         File file = new File(userDir, username + ".obj");
         if (!file.exists()) {
             return;
-        }
+         }
         file.delete();
+        try {
+            response.sendRedirect("/userList");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
