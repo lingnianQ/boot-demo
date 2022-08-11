@@ -39,10 +39,9 @@ public class ArticleController {
         String author = request.getParameter("author");
         String content = request.getParameter("content");
 
-        Article article = new Article(title, author, content);
-        File file = new File(articleDir, title + ".obj");
-
-        if (title == null || title.isEmpty()) {
+        if (title == null || title.trim().isEmpty() ||
+                author == null || author.trim().isEmpty() ||
+                content == null || content.trim().isEmpty()) {
             try {
                 response.sendRedirect("/article/article_fail.html");
             } catch (IOException e) {
@@ -50,6 +49,9 @@ public class ArticleController {
             }
             return;
         }
+
+        Article article = new Article(title, author, content);
+        File file = new File(articleDir, title + ".obj");
 
         try (
                 FileOutputStream fos = new FileOutputStream(file);
