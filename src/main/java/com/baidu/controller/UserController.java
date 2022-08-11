@@ -103,9 +103,9 @@ public class UserController {
         User user = new User(username, password);
         File file = new File(userDir, user.getName() + ".obj");
 
-        if (user.getName() == null || user.getPassword() == null
+        if (!file.exists() || user.getName() == null || user.getPassword() == null
                 || user.getName().isEmpty() || user.getPassword().isEmpty()
-                || !file.exists()) {
+        ) {
             try {
                 response.sendRedirect("/login/login_info_error.html");
             } catch (IOException e) {
@@ -121,7 +121,7 @@ public class UserController {
             if (userGet.getName().equals(user.getName())
                     && userGet.getPassword().equals(user.getPassword())) {
                 response.sendRedirect("/login/login_success.html");
-            }else {
+            } else {
                 response.sendRedirect("/login/login_fail.html");
             }
 
