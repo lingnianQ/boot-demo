@@ -121,14 +121,17 @@ public class UserController {
             if (userGet.getName().equals(user.getName())
                     && userGet.getPassword().equals(user.getPassword())) {
                 response.sendRedirect("/login/login_success.html");
-            } else {
-                response.sendRedirect("/login/login_fail.html");
+                return;
             }
-
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
+        try {
+            response.sendRedirect("/login/login_fail.html");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }
