@@ -55,15 +55,11 @@ public class ArticleController {
                 FileOutputStream fos = new FileOutputStream(file);
                 ObjectOutputStream oos = new ObjectOutputStream(fos);) {
             oos.writeObject(article);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
             response.sendRedirect("/article/article_success.html");
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 }
 
